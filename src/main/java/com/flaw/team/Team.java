@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "teams")
 public class Team {
 
     @Id
