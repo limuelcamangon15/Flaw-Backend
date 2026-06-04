@@ -7,6 +7,8 @@ import com.flaw.user.User;
 import com.flaw.user.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BugService {
 
@@ -76,5 +78,23 @@ public class BugService {
         bugRepository.save(bug);
 
         return BugResponse.from(bug);
+    }
+
+    // Get one bug
+    public BugResponse getBugById(Long id){
+        Bug bug = bugRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Bug not found"));
+
+        return BugResponse.from(bug);
+    }
+
+    // Get bugs assigned to current user
+    public List<BugResponse> getMyBugs(){
+        User currentUser = authUtil.getCurrentUser();
+
+        return bugRepository.findByAssigneeId(currentUser.getId())
+                .stream()
+                .map(BugResponse::from)
+                .toList();
     }
 }
