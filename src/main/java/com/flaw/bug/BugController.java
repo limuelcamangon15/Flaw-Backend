@@ -27,6 +27,30 @@ public class BugController {
             @RequestParam(required = false) BugStatus status,
             @RequestParam(required = false) BugCategory category){
 
-        return ResponseEntity.ok(bugService.get)
+        return ResponseEntity.ok(bugService.getBugsByTeam(teamId, status, category));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BugResponse> getBugById(@PathVariable Long id){
+        return ResponseEntity.ok(bugService.getBugById(id));
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<BugResponse> updateStatus(
+            @PathVariable Long id,
+            @RequestParam  BugStatus status){
+        return ResponseEntity.ok(bugService.updateStatus(id, status));
+    }
+
+    @PatchMapping("/{id}/assign")
+    public ResponseEntity<BugResponse> assginBug(
+            @PathVariable Long bugId,
+            @RequestParam Long userId){
+        return ResponseEntity.ok(bugService.assignBug(bugId, userId));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<BugResponse>> getMyBugs(){
+        return ResponseEntity.ok(bugService.getMyBugs());
     }
 }
