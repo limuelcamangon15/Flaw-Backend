@@ -63,5 +63,18 @@ public class BugService {
         return BugResponse.from(bug);
     }
 
+    // Assign bug to a developer
+    public BugResponse assignBug(Long bugId, Long userId){
+        Bug bug = bugRepository.findById(bugId)
+                .orElseThrow(()-> new RuntimeException("Bug not found"));
 
+        User assignee = userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+
+        bug.setAssignee(assignee);
+
+        bugRepository.save(bug);
+
+        return BugResponse.from(bug);
+    }
 }
