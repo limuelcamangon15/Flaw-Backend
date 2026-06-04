@@ -2,7 +2,9 @@ package com.flaw.auth;
 
 import com.flaw.user.User;
 import com.flaw.user.UserRepository;
+import com.flaw.utils.ApiResponse;
 import jakarta.validation.Valid;
+import netscape.javascript.JSObject;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -48,11 +50,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email, request.password)
-        );
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
 
-        return ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(request.email)));
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email, request.password));
+            return ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(request.email)));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(new ApiResponse<>(false, "Invalid Email or Password", null));
+        }
     }
 }
