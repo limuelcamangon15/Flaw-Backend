@@ -6,6 +6,8 @@ import com.flaw.bug.BugRepository;
 import com.flaw.user.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
@@ -34,5 +36,27 @@ public class CommentService {
         commentRepository.save(comment);
 
         return CommentResponse.from(comment);
+    }
+
+    // Get all comments by bug id
+    public List<CommentResponse> getCommentsByBug(Long bugId){
+        return commentRepository.findByBugIdOrderByCreatedAtAsc(bugId)
+                .stream()
+                .map(CommentResponse::from)
+                .toList();
+    }
+
+    // Delete one comment
+    public void deleteComment(Long id){
+        User currentUser = authUtil.getCurrentUser();
+
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Comment not found"));
+
+        if(!comment.getAuthor().getId().equals(currentUser.getId())){
+            throw new RuntimeException("You can only delete your own comment!");
+        }
+
+        commentRepository.delete(comment);
     }
 }
