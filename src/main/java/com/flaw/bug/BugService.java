@@ -97,4 +97,21 @@ public class BugService {
                 .map(BugResponse::from)
                 .toList();
     }
+
+    // Get all bugs for a team (with optional params filters)
+    public List<BugResponse> getBugsByTeam(Long teamId, BugStatus status, BugCategory category){
+        List<Bug> bugs;
+
+        if(status != null){
+            bugs = bugRepository.findByTeamIdAndStatus(teamId, status);
+        }
+        else if(category != null){
+            bugs = bugRepository.findByTeamIdAndCategory(teamId, category);
+        }
+        else{
+            bugs = bugRepository.findByTeamId(teamId);
+        }
+
+        return bugs.stream().map(BugResponse::from).toList();
+    }
 }
