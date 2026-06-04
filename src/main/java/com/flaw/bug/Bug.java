@@ -37,7 +37,7 @@ public class Bug {
     @JoinColumn(name = "reporter_id")
     private User reporter;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User assignee;
 

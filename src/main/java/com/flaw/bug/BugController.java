@@ -44,9 +44,9 @@ public class BugController {
 
     @PatchMapping("/{id}/assign")
     public ResponseEntity<BugResponse> assignBug(
-            @PathVariable Long bugId,
+            @PathVariable Long id,
             @RequestParam Long userId){
-        return ResponseEntity.ok(bugService.assignBug(bugId, userId));
+        return ResponseEntity.ok(bugService.assignBug(id, userId));
     }
 
     @GetMapping("/my")

@@ -24,6 +24,7 @@ public class JwtUtil {
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
 
+                .withClaim("id", user.getId())
                 .withClaim("firstName", user.getFirstName())
                 .withClaim("lastName", user.getLastName())
                 .withClaim("role", user.getRole().name())
