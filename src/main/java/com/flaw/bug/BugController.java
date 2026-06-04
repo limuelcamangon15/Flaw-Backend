@@ -43,7 +43,7 @@ public class BugController {
     }
 
     @PatchMapping("/{id}/assign")
-    public ResponseEntity<BugResponse> assginBug(
+    public ResponseEntity<BugResponse> assignBug(
             @PathVariable Long bugId,
             @RequestParam Long userId){
         return ResponseEntity.ok(bugService.assignBug(bugId, userId));
