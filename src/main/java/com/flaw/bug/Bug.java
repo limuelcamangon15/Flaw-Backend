@@ -38,8 +38,8 @@ public class Bug {
     private User reporter;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "asignee_id")
-    private User asignee;
+    @JoinColumn(name = "assignee_id")
+    private User assignee;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt =  LocalDateTime.now();
@@ -101,12 +101,12 @@ public class Bug {
         this.reporter = reporter;
     }
 
-    public User getAsignee() {
-        return asignee;
+    public User getAssignee() {
+        return assignee;
     }
 
-    public void setAsignee(User asignee) {
-        this.asignee = asignee;
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
     }
 
     public LocalDateTime getCreatedAt() {
