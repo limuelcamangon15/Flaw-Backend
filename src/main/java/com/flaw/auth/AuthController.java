@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -35,7 +37,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request){
         if(userRepository.existsByEmail(request.email)){
-            return ResponseEntity.badRequest().body("Email already in use");
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Email already in use", null));
         }
 
         User user = new User();
@@ -46,7 +48,7 @@ public class AuthController {
         user.setRole(request.role);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(user.getEmail())));
+        return ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(user)));
     }
 
     @PostMapping("/login")
@@ -54,7 +56,11 @@ public class AuthController {
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email, request.password));
-            return ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(request.email)));
+
+            User user = userRepository.findByEmail(request.email)
+                    .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
+            return ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(user)));
 
         } catch (Exception e) {
             return ResponseEntity.status(401).body(new ApiResponse<>(false, "Invalid Email or Password", null));
