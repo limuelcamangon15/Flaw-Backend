@@ -27,7 +27,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteComment(@RequestParam Long id){
+    public ResponseEntity<?> deleteComment(@PathVariable Long id){
         commentService.deleteComment(id);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "Comment deleted successfully!",null) );
