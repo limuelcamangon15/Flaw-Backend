@@ -4,6 +4,8 @@ import com.flaw.auth.AuthUtil;
 import com.flaw.user.User;
 import com.flaw.user.UserRepository;
 
+import java.util.List;
+
 public class TeamService {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
@@ -48,5 +50,23 @@ public class TeamService {
         teamRepository.save(team);
 
         return TeamResponse.from(team);
+    }
+
+    // Get one team
+    public TeamResponse getTeam(Long id){
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Team not found."));
+
+        return TeamResponse.from(team);
+    }
+
+    // Get my teams (current user logged in)
+    public List<TeamResponse> getMyTeams(){
+        User user = authUtil.getCurrentUser();
+
+        return teamRepository.findByMembersContaining(user)
+                .stream()
+                .map(TeamResponse::from)
+                .toList();
     }
 }
