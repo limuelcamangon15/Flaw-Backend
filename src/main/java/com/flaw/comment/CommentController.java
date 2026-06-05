@@ -26,7 +26,7 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getCommentsByBug(bugId));
     }
 
-    @GetMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteComment(@RequestParam Long id){
         commentService.deleteComment(id);
 

@@ -3,9 +3,11 @@ package com.flaw.team;
 import com.flaw.auth.AuthUtil;
 import com.flaw.user.User;
 import com.flaw.user.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TeamService {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
