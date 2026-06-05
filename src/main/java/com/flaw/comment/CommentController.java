@@ -22,7 +22,7 @@ public class CommentController {
     }
 
     @GetMapping("/bug/{bugId}")
-    public ResponseEntity<List<CommentResponse>> getCommentsByBug(@RequestParam Long bugId){
+    public ResponseEntity<List<CommentResponse>> getCommentsByBug(@PathVariable Long bugId){
         return ResponseEntity.ok(commentService.getCommentsByBug(bugId));
     }
 

@@ -1,5 +1,7 @@
 package com.flaw;
 
+import com.flaw.auth.CustomAccessDeniedHandler;
+import com.flaw.auth.CustomAuthenticationEntryPoint;
 import com.flaw.auth.JwtAuthFilter;
 import com.flaw.user.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -27,10 +29,14 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsServiceImpl userDetailsService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsServiceImpl userDetailsService, CustomAuthenticationEntryPoint customAuthenticationEntryPoint ,CustomAccessDeniedHandler customAccessDeniedHandler) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userDetailsService = userDetailsService;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
     @Bean
@@ -42,6 +48,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**",  "/api/test/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
