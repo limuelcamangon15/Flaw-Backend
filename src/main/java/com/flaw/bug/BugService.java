@@ -5,6 +5,7 @@ import com.flaw.team.Team;
 import com.flaw.team.TeamRepository;
 import com.flaw.user.User;
 import com.flaw.user.UserRepository;
+import com.flaw.utils.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class BugService {
         User reporter = authUtil.getCurrentUser();
 
         Team team  = teamRepository.findById(request.teamId)
-                .orElseThrow(() -> new RuntimeException("Team not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
 
         Bug bug = new Bug();
 
@@ -42,7 +43,7 @@ public class BugService {
 
         if(request.assigneeId != null){
             User assignee = userRepository.findById(request.assigneeId)
-                    .orElseThrow(() -> new RuntimeException("Assignee not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Assignee not found"));
 
             bug.setAssignee(assignee);
         }
@@ -56,7 +57,7 @@ public class BugService {
     // Update status
     public BugResponse updateStatus(Long id, BugStatus newStatus){
         Bug bug = bugRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bug not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Bug not found"));
         bug.setStatus(newStatus);
 
         // save
@@ -68,10 +69,10 @@ public class BugService {
     // Assign bug to a developer
     public BugResponse assignBug(Long bugId, Long userId){
         Bug bug = bugRepository.findById(bugId)
-                .orElseThrow(()-> new RuntimeException("Bug not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Bug not found"));
 
         User assignee = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("User not found"));
 
         bug.setAssignee(assignee);
 
@@ -83,7 +84,7 @@ public class BugService {
     // Get one bug
     public BugResponse getBugById(Long id){
         Bug bug = bugRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Bug not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Bug not found"));
 
         return BugResponse.from(bug);
     }

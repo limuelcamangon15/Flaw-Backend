@@ -4,6 +4,7 @@ import com.flaw.auth.AuthUtil;
 import com.flaw.bug.Bug;
 import com.flaw.bug.BugRepository;
 import com.flaw.user.User;
+import com.flaw.utils.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class CommentService {
         User author = authUtil.getCurrentUser();
 
         Bug bug = bugRepository.findById(request.bugId)
-                .orElseThrow(() -> new RuntimeException("Bug not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Bug not found"));
 
         Comment comment = new Comment();
         comment.setAuthor(author);
@@ -51,7 +52,7 @@ public class CommentService {
         User currentUser = authUtil.getCurrentUser();
 
         Comment comment = commentRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Comment not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Comment not found"));
 
         if(!comment.getAuthor().getId().equals(currentUser.getId())){
             throw new RuntimeException("You can only delete your own comment!");

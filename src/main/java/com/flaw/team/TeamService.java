@@ -3,6 +3,7 @@ package com.flaw.team;
 import com.flaw.auth.AuthUtil;
 import com.flaw.user.User;
 import com.flaw.user.UserRepository;
+import com.flaw.utils.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,10 +38,10 @@ public class TeamService {
     // Add team member
     public TeamResponse addMember(Long teamId, Long userId){
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new RuntimeException("Team not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found."));
 
         User newMember = userRepository.findById(userId)
-                        .orElseThrow(() -> new RuntimeException("User not found."));
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 
         if(team.getMembers().contains(newMember)){
             throw new RuntimeException("User is already a member");
@@ -57,7 +58,7 @@ public class TeamService {
     // Get one team
     public TeamResponse getTeam(Long id){
         Team team = teamRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Team not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found."));
 
         return TeamResponse.from(team);
     }
