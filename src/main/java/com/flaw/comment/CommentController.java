@@ -22,12 +22,16 @@ public class CommentController {
     }
 
     @GetMapping("/bug/{bugId}")
-    public ResponseEntity<List<CommentResponse>> getCommentsByBug(@PathVariable Long bugId){
-        return ResponseEntity.ok(commentService.getCommentsByBug(bugId));
+    public ResponseEntity<ApiResponse<List<CommentResponse>>> getCommentsByBug(@PathVariable Long bugId){
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "success",
+                commentService.getCommentsByBug(bugId)
+        ));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<?>> deleteComment(@PathVariable Long id){
         commentService.deleteComment(id);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "Comment deleted successfully!",null) );
