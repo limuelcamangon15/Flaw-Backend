@@ -55,7 +55,7 @@ public class CommentService {
                 .orElseThrow(()-> new ResourceNotFoundException("Comment not found"));
 
         if(!comment.getAuthor().getId().equals(currentUser.getId())){
-            throw new RuntimeException("You can only delete your own comment!");
+            throw new IllegalArgumentException("You can only delete your own comment!");
         }
 
         commentRepository.delete(comment);

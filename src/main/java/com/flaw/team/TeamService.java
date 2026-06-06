@@ -44,7 +44,7 @@ public class TeamService {
                         .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 
         if(team.getMembers().contains(newMember)){
-            throw new RuntimeException("User is already a member");
+            throw new IllegalArgumentException("User is already a member");
         }
 
         team.getMembers().add(newMember);
