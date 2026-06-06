@@ -3,6 +3,7 @@ package com.flaw.bug;
 import com.flaw.auth.AuthUtil;
 import com.flaw.team.Team;
 import com.flaw.team.TeamRepository;
+import com.flaw.user.Role;
 import com.flaw.user.User;
 import com.flaw.user.UserRepository;
 import com.flaw.utils.ResourceNotFoundException;
@@ -77,14 +78,34 @@ public class BugService {
 
     // Assign bug to a developer
     public BugResponse assignBug(Long bugId, Long userId){
+        User currentUser = authUtil.getCurrentUser();
+
         Bug bug = bugRepository.findById(bugId)
                 .orElseThrow(()-> new ResourceNotFoundException("Bug not found"));
 
         User assignee = userRepository.findById(userId)
                 .orElseThrow(()-> new ResourceNotFoundException("User not found"));
 
-        bug.setAssignee(assignee);
+        // Check if QA and if self assigning the bug
+        boolean isQA = currentUser.getRole() == Role.QA;
+        boolean isSelfAssign = currentUser.getId().equals(assignee.getId());
 
+        if(!isQA && !isSelfAssign){
+            throw new IllegalArgumentException("Developers can only self-assign bugs");
+        }
+
+        // Check if the assignee is a member of the team
+        boolean isTeamMember = bug.getTeam()
+                .getMembers()
+                .stream()
+                .anyMatch(member -> member.getId().equals(assignee.getId()));
+
+        if(!isTeamMember){
+            throw new IllegalArgumentException("Assignee must be a member of the bug's team");
+        }
+
+        bug.setAssignee(assignee);
+        // save
         bugRepository.save(bug);
 
         return BugResponse.from(bug);
