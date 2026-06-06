@@ -32,6 +32,15 @@ public class BugService {
         Team team  = teamRepository.findById(request.teamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
 
+        // Check if the reporter is a member of team
+        boolean isMember = team.getMembers()
+                .stream()
+                .anyMatch(member -> member.getId().equals(reporter.getId()));
+
+        if(!isMember){
+            throw new IllegalArgumentException("You can only report bugs in teams you belong to");
+        }
+
         Bug bug = new Bug();
 
         bug.setTitle(request.title);
