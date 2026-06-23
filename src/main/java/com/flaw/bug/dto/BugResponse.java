@@ -18,6 +18,7 @@ public class BugResponse {
     public Long teamId;
     public String teamName;
     public LocalDateTime createdAt;
+    public BugAnalysisResponse analysis;
 
     public static BugResponse from(Bug bug){
         BugResponse res = new BugResponse();
@@ -31,6 +32,7 @@ public class BugResponse {
         res.teamId = bug.getTeam().getId();
         res.teamName = bug.getTeam().getName();
         res.createdAt = bug.getCreatedAt();
+        res.analysis = BugAnalysisResponse.from(bug.getAnalysis());
 
         return res;
     }

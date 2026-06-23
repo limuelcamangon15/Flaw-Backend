@@ -20,12 +20,14 @@ public class BugService {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
     private final AuthUtil authUtil;
+    private final AiBugAnalyzerService aiBugAnalyzerService;
 
-    public BugService(BugRepository bugRepository, TeamRepository teamRepository, UserRepository userRepository, AuthUtil authUtil) {
+    public BugService(BugRepository bugRepository, TeamRepository teamRepository, UserRepository userRepository, AuthUtil authUtil, AiBugAnalyzerService aiBugAnalyzerService) {
         this.bugRepository = bugRepository;
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
         this.authUtil = authUtil;
+        this.aiBugAnalyzerService = aiBugAnalyzerService;
     }
 
     // Create bug
@@ -61,9 +63,12 @@ public class BugService {
         }
 
         // save to database
-        bugRepository.save(bug);
+        Bug savedBug = bugRepository.save(bug);
 
-        return BugResponse.from(bug);
+        BugAnalysis analysis = aiBugAnalyzerService.analyze(savedBug);
+        savedBug.setAnalysis(analysis);
+
+        return BugResponse.from(savedBug);
     }
 
     // Update status

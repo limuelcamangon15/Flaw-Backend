@@ -23,23 +23,30 @@ public class AiBugAnalyzerService {
         String prompt = """
             You are a senior software engineer analyzing a bug report.
             Analyze the following bug and respond ONLY with a valid JSON object, no explanation, no markdown, no backticks.
-
+        
             Bug Title: %s
             Bug Description: %s
             Category: %s
-
-            Respond with exactly this JSON structure:
+        
+            Rules:
+            - severity must be exactly one of: Low, Medium, High, Critical
+            - labels must be short readable tags, not slugs. Example: "Mobile Safari", "Authentication", "Input Validation"
+            - possibleRootCauses must be full readable sentences. Example: "Special characters may not be URL-encoded before sending to the server."
+            - suggestedNextSteps must be full actionable sentences. Example: "Test the login endpoint directly using Postman with special character passwords."
+            - Each list should have 2 to 4 items maximum.
+        
+            Use this JSON structure as SAMPLE STRUCTURE ONLY:
             {
-              "severity": "Low | Medium | High | Critical",
-              "labels": ["label1", "label2"],
-              "possibleRootCauses": ["cause1", "cause2"],
-              "suggestedNextSteps": ["step1", "step2"]
+              "severity": "High",
+              "labels": ["Authentication", "Mobile", "Input Validation"],
+              "possibleRootCauses": ["Special characters are not being sanitized before processing.", "The mobile client may not be encoding the request body correctly."],
+              "suggestedNextSteps": ["Test the endpoint directly with special character inputs.", "Review input sanitization on the auth service.", "Check mobile client request encoding."]
             }
             """.formatted(
                 bug.getTitle(),
                 bug.getDescription(),
                 bug.getCategory()
-        );
+            );
 
         BugAnalysis analysis = new BugAnalysis();
         analysis.setBug(bug);
