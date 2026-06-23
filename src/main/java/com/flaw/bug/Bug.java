@@ -44,6 +44,9 @@ public class Bug {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt =  LocalDateTime.now();
 
+    @OneToOne(mappedBy = "bug", cascade = CascadeType.ALL)
+    private BugAnalysis analysis;
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -115,5 +118,13 @@ public class Bug {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public BugAnalysis getAnalysis(){
+        return analysis;
+    }
+
+    public void setAnalysis(BugAnalysis analysis){
+        this.analysis = analysis;
     }
 }
