@@ -1,6 +1,8 @@
 package com.flaw.bug;
 
 import com.flaw.auth.AuthUtil;
+import com.flaw.bug.dto.BugRequest;
+import com.flaw.bug.dto.BugResponse;
 import com.flaw.team.Team;
 import com.flaw.team.TeamRepository;
 import com.flaw.user.Role;

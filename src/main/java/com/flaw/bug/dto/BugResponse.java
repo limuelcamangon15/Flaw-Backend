@@ -1,4 +1,8 @@
-package com.flaw.bug;
+package com.flaw.bug.dto;
+
+import com.flaw.bug.Bug;
+import com.flaw.bug.BugCategory;
+import com.flaw.bug.BugStatus;
 
 import java.time.LocalDateTime;
 

@@ -1,5 +1,6 @@
-package com.flaw.bug;
+package com.flaw.bug.dto;
 
+import com.flaw.bug.BugCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

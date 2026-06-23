@@ -19,7 +19,7 @@ public class AiTestController {
     @GetMapping("/ai")
     public ResponseEntity<ApiResponse<?>> testAi(){
         return ResponseEntity.ok(new ApiResponse<>(true, "success", chatClient.prompt()
-                .user("Say hi to Limuel Camangon")
+                .user("What is spring ai")
                 .call()
                 .content()));
     }

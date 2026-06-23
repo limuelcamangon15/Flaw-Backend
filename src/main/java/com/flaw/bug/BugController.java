@@ -1,5 +1,7 @@
 package com.flaw.bug;
 
+import com.flaw.bug.dto.BugRequest;
+import com.flaw.bug.dto.BugResponse;
 import com.flaw.utils.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
